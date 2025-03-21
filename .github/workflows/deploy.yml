@@ -21,14 +21,14 @@ jobs:
       - name: Deploy Code to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd /home/ubuntu/Diabities_test_project || git clone git@github.com:your-username/Diabities_test_project.git
-          cd /home/ubuntu/Diabities_test_project
+          cd /home/ubuntu/Diabites_Test_ML_Project || git clone git@github.com:your-username/Diabites_Test_ML_Project.git
+          cd /home/ubuntu/Diabites_Test_ML_Project
           git pull origin main
           EOF
 
       - name: Run ML File on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd /home/ubuntu/Diabities_test_project
+          cd /home/ubuntu/Diabites_Test_ML_Project
           Diabities_test_project  # Replace with your actual ML script
           EOF
