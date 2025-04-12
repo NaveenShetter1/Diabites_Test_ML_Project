@@ -18,17 +18,24 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
-      - name: DTransfer Folder to EC2
+      - name: Transfer Folder to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd /home/ubuntu/Diabites_Test_ML_Project || git@github.com:NaveenShetter1/Diabites_Test_ML_Project.git
+          cd /home/ubuntu/Diabites_Test_ML_Project || git clone https://github.com/NaveenShetter1/Diabites_Test_ML_Project.git
           cd /home/ubuntu/Diabites_Test_ML_Project
           git pull origin main
           EOF
 
-      - name: Verify Folder on EC2
+      - name: Restart Flask App (main.py)
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd /home/ubuntu/Diabites_Test_ML_Project
-          #Diabities_test_project  # Replace with your actual ML script
+            # Assuming you are using gunicorn or flask with systemd, restart the service
+            sudo systemctl restart flaskapp  # Replace 'flaskapp' with the actual service name if different
+          EOF
+
+      - name: Verify Flask App Health Check
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            # Check if Flask app is running using health check endpoint
+            curl -f http://localhost:5000/health || exit 1  # Adjust the port if necessary
           EOF
