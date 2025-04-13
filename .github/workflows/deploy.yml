@@ -18,17 +18,17 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
-      - name: Transfer Folder to EC2
+      - name: DTransfer Folder to EC2
         run: |
-          ssh -tt -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /home/ubuntu/Diabites_Test_ML_Project || git clone https://github.com/NaveenShetter1/Diabites_Test_ML_Project.git
-            cd /home/ubuntu/Diabites_Test_ML_Project
-            git pull origin main
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          cd /home/ubuntu/Diabites_Test_ML_Project || git clone https://github.com/NaveenShetter1/Diabites_Test_ML_Project.git
+          cd /home/ubuntu/Diabites_Test_ML_Project
+          git pull origin main
           EOF
 
       - name: Verify Folder on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /home/ubuntu/Diabites_Test_ML_Project
-            ls -l
+          cd /home/ubuntu/Diabites_Test_ML_Project
+          #Diabities_test_project  # Replace with your actual ML script
           EOF
