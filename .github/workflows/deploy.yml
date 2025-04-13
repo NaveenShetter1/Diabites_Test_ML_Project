@@ -20,7 +20,7 @@ jobs:
 
       - name: Transfer Folder to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -tt -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           cd /home/ubuntu/Diabites_Test_ML_Project || git clone https://github.com/NaveenShetter1/Diabites_Test_ML_Project.git
           cd /home/ubuntu/Diabites_Test_ML_Project
           git pull origin main
