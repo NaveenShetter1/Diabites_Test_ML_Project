@@ -18,7 +18,7 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
-      - name: DTransfer Folder to EC2
+      - name: Transfer Folder to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           cd /home/ubuntu/Diabites_Test_ML_Project || git clone https://github.com/NaveenShetter1/Diabites_Test_ML_Project.git
@@ -30,5 +30,12 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           cd /home/ubuntu/Diabites_Test_ML_Project
-          #Diabities_test_project  # Replace with your actual ML script
+          ls -l
+          EOF
+
+      - name: Restart Flask App
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          sudo systemctl restart flaskapp
+          sudo systemctl status flaskapp --no-pager
           EOF
