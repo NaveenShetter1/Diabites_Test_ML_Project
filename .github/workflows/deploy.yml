@@ -21,21 +21,14 @@ jobs:
       - name: Transfer Folder to EC2
         run: |
           ssh -tt -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd /home/ubuntu/Diabites_Test_ML_Project || git clone https://github.com/NaveenShetter1/Diabites_Test_ML_Project.git
-          cd /home/ubuntu/Diabites_Test_ML_Project
-          git pull origin main
+            cd /home/ubuntu/Diabites_Test_ML_Project || git clone https://github.com/NaveenShetter1/Diabites_Test_ML_Project.git
+            cd /home/ubuntu/Diabites_Test_ML_Project
+            git pull origin main
           EOF
 
-      - name: Restart Flask App (main.py)
+      - name: Verify Folder on EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            # Assuming you are using gunicorn or flask with systemd, restart the service
-            sudo systemctl restart flaskapp  # Replace 'flaskapp' with the actual service name if different
-          EOF
-
-      - name: Verify Flask App Health Check
-        run: |
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            # Check if Flask app is running using health check endpoint
-            curl -f http://localhost:5000/health || exit 1  # Adjust the port if necessary
+            cd /home/ubuntu/Diabites_Test_ML_Project
+            ls -l
           EOF
